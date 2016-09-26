@@ -72,6 +72,8 @@ Use of parseLibraryReferences implies storing each media ids between []. But whe
 
 Questions to solve :
 -> by what should we replace the textarea to store the mediaIds on the html form ?
--> how is the add/edit form told to show the list of medias in the select field ? 
+-> how is the add/edit form told to show the list of medias in the select field ?
+Answer :     Controller\Module : public function addWidgetForm($type, $playlistId)
+
 -> Where to put the javascript code dealing with the onchange on the select ?
  
