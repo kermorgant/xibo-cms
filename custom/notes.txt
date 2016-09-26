@@ -1,0 +1,77 @@
+;; This buffer is for text that is not saved, and for Lisp evaluation.
+;; To create a file, visit it with C-x C-f and enter text in its buffer.
+
+
+$(document).ready(function() {
+			  $.getScript("http://malsup.github.io/jquery.cycle2.js");
+			  $.getScript("http://malsup.github.io/jquery.cycle2.tile.js", function(jd) {
+				      $('#slide').cycle({ 
+							fx:      'tileSlide', 
+							delay:   100,
+							fit: 1
+							});
+				      });
+			  });
+
+
+
+
+
+$(document).ready(function() {
+			  $.getScript("/modules/vendor/jquery-cycle-2.1.6.min.js", function(jd) {
+
+				      });
+			  $('#slide').cycle({ 
+					    fx:      'shuffle', 
+					    fit: 1
+					    });			  
+			  });
+
+=====
+<div class="cycle-slideshow" data-cycle-fx="shuffle" data-cycle-timeout="2000">
+  <img src="/library/download/19?preview=1" /> <img src="/library/download/21?preview=1" />
+</div>
+
+
+$.getScript("/modules/vendor/jquery-cycle-2.1.6.min.js");
+
+$('.cycle-slideshow').cycle();
+=======
+
+OK
+=====
+<div class="pics" id="slide" ><img src="/library/download/19?preview=1" /> <img src="/library/download/21?preview=1" /> <img src="/library/download/20?preview=1" /></div>
+====
+$(document).ready(function() {
+			  $.getScript("http://malsup.github.io/jquery.cycle2.js");
+			  $.getScript("http://malsup.github.io/jquery.cycle2.tile.js", function(jd) {
+				      $('#slide').cycle({ 
+							fx:      'tileSlide', 
+							delay:   100,
+							fit: 1
+							});
+				      });
+			  });
+
+
+http://jquery.malsup.com/cycle2/demo/shuffle.php
+
+
+===
+
+playlst-form-library-assign
+
+
+We have tested the cycle plugin via the text module, inserting javascript code from the javascript source panel, and using images from the library.
+
+So, now investigating how the images from the library could be added in a slideshow module. The text module seems like a good inspiration source.
+Have still to figure out lots of things.
+
+Use of parseLibraryReferences implies storing each media ids between []. But when is that function called ?
+(it calls widget->assignMedia(), see Entity\Widget.php, so assigning several medias to a module/widget is OK)
+
+Questions to solve :
+-> by what should we replace the textarea to store the mediaIds on the html form ?
+-> how is the add/edit form told to show the list of medias in the select field ? 
+-> Where to put the javascript code dealing with the onchange on the select ?
+ 
