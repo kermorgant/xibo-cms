@@ -11,4 +11,4 @@ RUN apt-get update && apt-get install -y \
 
 RUN cd /data/web && composer install
 
-RUN npm install  --global gulp-cli
+RUN npm install  --global gulp-cli 
