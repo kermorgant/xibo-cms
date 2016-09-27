@@ -1,0 +1,222 @@
+{% extends "form-base.twig" %}
+{% import "forms.twig" as forms %}
+
+{% block formButtons %}
+  {% trans "Cancel" %}, XiboDialogClose()
+  {% trans "Save" %}, AssignedMediaSubmit()
+{% endblock %}
+
+{% block formFieldActions %}
+  [{
+  "field": "useDuration",
+  "trigger": "init",
+  "value": false,
+  "operation": "is:checked",
+  "actions": {
+  ".duration-fields": { "display": "none" }
+  }
+  },{
+  "field": "useDuration",
+  "trigger": "change",
+  "value": false,
+  "operation": "is:checked",
+  "actions": {
+  ".duration-fields": { "display": "none" }
+  }
+  },{
+  "field": "useDuration",
+  "trigger": "init",
+  "value": true,
+  "operation": "is:checked",
+  "actions": {
+  ".duration-fields": { "display": "block" }
+  }
+  },{
+  "field": "useDuration",
+  "trigger": "change",
+  "value": true,
+  "operation": "is:checked",
+  "actions": {
+  ".duration-fields": { "display": "block" }
+  }
+  }]
+{% endblock %}
+
+
+{% block callBack %}imageFormCallBack{% endblock %}
+
+{% block formHtml %}
+  {% block slideshowFormHtml %}
+  <div class="row">
+    <div class="col-sm-12">
+      {% set title %}{% trans "Set a duration?" %}{% endset %}
+      {% set helpText %}{% trans "Select to provide a specific duration for this Widget" %}{% endset %}
+      {{ forms.checkbox("useDuration", title, 0, helpText) }}
+
+      {% set title %}{% trans "Duration" %}{% endset %}
+      {% set helpText %}{% trans "The duration in seconds this should be displayed" %}{% endset %}
+      {{ forms.number("duration", title, module.getModule().defaultDuration, helpText, "duration-fields", "required") }}
+
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-9">
+      <div id="libraryAssignFilterOptions">
+        <form onsubmit="false">
+          <div class="row">
+            <div class="col-md-6">
+              {% set title %}{% trans "Name" %}{% endset %}
+              {{ inline.input("media", title) }}
+            </div>
+            <div class="col-md-6">
+              {% set title %}{% trans "Type" %}{% endset %}
+              {{ inline.dropdown("type", "single", title, "", [{type: null, name: ""}], "type", "name") }}
+            </div>
+          </div>
+        </form>
+      </div>
+      
+      <div class="XiboGrid" id="{{ random() }}">
+        <div class="XiboData">
+          <table id="mediaAssignments" class="table table-striped">
+            <thead>
+              <tr>
+                <th>{% trans "ID" %}</th>
+                <th>{% trans "Name" %}</th>
+                <th>{% trans "Type" %}</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div id="SlideshowAssign" class="well" data-url="{{ urlFor("module.widget.add", {type: module.widget.type, id: playlist.playlistId}) }} ">
+        <h4>{% trans "Assignments" %}</h4>
+        <div>
+          <ul id="SlideshowAssignSortable">
+            {% for item in mediaList %}
+              <li id="MediaID_{{ item.mediaId }}" class="li-sortable">{{ item.name }}<span class="glyphicon glyphicon-minus-sign"></span></li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% endblock %}
+
+  {% block slideshowJavascript %}
+  <script type="text/javascript">
+    var AssignedMediaSubmit = function() {
+    // Collect our media
+    var media = '';
+    $("#SlideshowAssignSortable > li").each(function() {
+    media = media + ',[' + $(this).data().mediaId + ']';
+    });
+    var useDuration = $("#useDuration").val();
+    var duration = $("#duration").val();
+
+    $.ajax({
+    type: "post",
+    url: $("#SlideshowAssign").data().url,
+    cache: false,
+    dataType: "json",
+    data: {
+    mediaList: media.substring(1),
+    useDuration: useDuration,
+    duration: duration		
+    },
+    success: XiboSubmitResponse
+    });	
+    };
+
+
+
+            function imageFormCallBack() {
+                // prevent filter form submit
+                $("#libraryAssignFilterOptions").find("form").on("submit", function(e) {
+                    e.preventDefault();
+                    return false;
+                });
+
+                var mediaTable = $("#mediaAssignments").DataTable({
+                    "language": dataTablesLanguage,
+                    serverSide: true, stateSave: true,
+                    searchDelay: 3000,
+                    "order": [[1, "asc"]],
+                    "filter": false,
+                    ajax: {
+                        url: "{{ urlFor("library.search") }}",
+                        "data": function (d) {
+                            $.extend(d, $("#libraryAssignFilterOptions").find("form").serializeObject());
+                        }
+                    },
+                    "columns": [
+                        {"data": "mediaId"},
+                        {"data": "name"},
+                        {"data": "mediaType"},
+                        {
+                            "sortable": false,
+                            "data": function (data, type, row, meta) {
+                                if (type != "display")
+                                    return "";
+
+                                // Create a click-able span
+                                return "<a href=\"#\" class=\"assignItem\"><span class=\"glyphicon glyphicon-plus-sign\"></a>";
+                            }
+                        }
+                    ]
+                });
+
+                mediaTable.on('draw', function (e, settings) {
+                    dataTableDraw(e, settings);
+
+                    // Clicky on the +spans
+                    $(".assignItem", "#mediaAssignments").click(function () {
+                        // Get the row that this is in.
+                        var data = mediaTable.row($(this).closest("tr")).data();
+
+                        // Construct a new list item for the lower list and append it.
+                        var newItem = $("<li/>", {
+                            "text": " " + data.name,
+                            "data-media-id": data.mediaId,
+                            "class": "li-sortable",
+                            "dblclick": function () {
+                                $(this).remove();
+                            }
+                        });
+
+                        newItem.appendTo("#SlideshowAssignSortable");
+
+                        // Add a span to that new item
+                        $("<span/>", {
+                            "class": "glyphicon glyphicon-minus-sign",
+                            click: function () {
+                                $(this).parent().remove();
+                            }
+                        }).prependTo(newItem);
+                    });
+                });
+                mediaTable.on('processing.dt', dataTableProcessing);
+
+                // Make our little list sortable
+                $("#SlideshowAssignSortable").sortable();
+
+                // Bind the filter form
+                $("#libraryAssignFilterOptions").find("input, select").change(function () {
+                    mediaTable.ajax.reload();
+                });
+    }
+
+  </script>
+    
+    {% endblock %}
+
+  
+{% endblock %}
