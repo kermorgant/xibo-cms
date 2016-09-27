@@ -19,7 +19,8 @@ services:
       - "9505:9505"
   cms-web:
     container_name: cms-web
-    image: xibosignage/xibo-cms-dev:latest
+    build: docker/cms-web
+#    image: xibosignage/xibo-cms-dev:latest
     ports:
       - "80:80"
     environment:
