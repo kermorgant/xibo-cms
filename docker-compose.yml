@@ -11,6 +11,8 @@ services:
       - MYSQL_ROOT_PASSWORD=root
     volumes:
       - ./shared/db:/var/lib/mysql
+    ports:
+      - "3306:3306"
 
   cms-xmr:
     container_name: cms-xmr
