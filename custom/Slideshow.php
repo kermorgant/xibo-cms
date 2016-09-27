@@ -146,7 +146,8 @@ class Slideshow extends ModuleWidget
         $data['viewPortWidth'] = ($isPreview) ? $this->region->width : '[[ViewPortWidth]]';
         
         $duration = $this->getCalculatedDurationForGetResource();
-        
+
+        //$mediaList = $this->getOption('media', null);
         $mediaList = explode(',',$this->parseLibraryReferences($isPreview, $this->getOption('mediaList', null)));
         
         // Replace the head content
@@ -172,13 +173,13 @@ EOD;
             $this->widget->save(['saveWidgetOptions' => false, 'notifyDisplays' => true]);        
 
         $i = 0;
-        $body = '<h1>slideshow</h1>';
+        $body = '<h1>'.$mediaList.'</h1>';
         foreach($mediaList as $media) {
             $i++;
             if ($i == 1) {
                 $body .= '<div id="slide">';
             }
-            $body .= '<img src="' . $media . '"/>';
+            $body .= '<img src="' . $media . '" style="width: 100%; height: auto;"/>';
         }
         if ($i > 0) {
             $body .= '</div>';
