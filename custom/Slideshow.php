@@ -32,7 +32,7 @@ use Xibo\Widget\ModuleWidget;
 class Slideshow extends ModuleWidget
 {
     private $resourceFolder;
-    protected $codeSchemaVersion = 1;
+    protected $codeSchemaVersion = 2;
 
     /**
      * Slideshow constructor.
@@ -57,7 +57,7 @@ class Slideshow extends ModuleWidget
             $module->name = 'Slideshow';
             $module->type = 'slideshow';
             $module->class = 'Xibo\Custom\Slideshow';
-            $module->description = 'Slideshow attempt with jquery cycle plugin';
+            $module->description = 'Slideshow with jquery cycle plugin';
             $module->imageUri = 'forms/library.gif';
             $module->enabled = 1;
             $module->previewEnabled = 0;
@@ -67,13 +67,14 @@ class Slideshow extends ModuleWidget
             $module->schemaVersion = $this->codeSchemaVersion;
             $module->settings = [];
             $module->defaultDuration = 60;
-
+            $module->viewPath = '../custom/slideshow';
+            
             $this->setModule($module);
             $this->installModule();
         }
 
         // Check we are all installed
-        $this->installFiles();
+        //$this->installFiles();
     }
 
     public function installFiles()
@@ -81,14 +82,6 @@ class Slideshow extends ModuleWidget
         $this->mediaFactory->createModuleSystemFile(PROJECT_ROOT . '/web/modules/jquery-cycle-2.1.6.min.js')->save();
         $this->mediaFactory->createModuleSystemFile(PROJECT_ROOT . '/web/modules/xibo-layout-scaler.js')->save();
     }
-
-    /**
-     * Form for updating the module settings
-     */
-    // public function settingsForm()
-    // {
-    //     return 'slideshow-form-settings';
-    // }
 
     public function validate()
     {
@@ -104,9 +97,7 @@ class Slideshow extends ModuleWidget
     {
         $this->setDuration($this->getSanitizer()->getInt('duration', $this->getDuration()));
         $this->setUseDuration($this->getSanitizer()->getCheckbox('useDuration'));
-
         $this->setOption('mediaList', $this->getSanitizer()->getString('mediaList'));
-        
         
         // Save the widget
         $this->validate();
@@ -147,25 +138,10 @@ class Slideshow extends ModuleWidget
         
         $duration = $this->getCalculatedDurationForGetResource();
 
-        //$mediaList = $this->getOption('media', null);
-        $mediaList = explode(',',$this->parseLibraryReferences($isPreview, $this->getOption('mediaList', null)));
-        
         // Replace the head content
         $javaScriptContent = '<script type="text/javascript" src="' . $this->getResourceUrl('vendor/jquery-1.11.1.min.js') . '"></script>';
         $javaScriptContent .= '<script type="text/javascript" src="' . $this->getResourceUrl('vendor/jquery-cycle-2.1.6.min.js') . '"></script>';
         $javaScriptContent .= '<script type="text/javascript" src="' . $this->getResourceUrl('xibo-layout-scaler.js') . '"></script>';
-
-//         $javaScriptContent .=  'EOD'
-// <script type="text/javascript">
-// 				      $('#slide').cycle({ 
-// 							fx:      'tileBlind,flipHorz,flipVert', 
-// 							timeout:   4000
-// 							});
-// </script>
-// EOD;
-
-                           
-
         
         // Update and save widget if we've changed our assignments.
         if ($this->hasMediaChanged())
@@ -180,6 +156,8 @@ class Slideshow extends ModuleWidget
     data-cycle-pager-template="<a href='#'><img src='{{src}}' width=20 height=20></a>"
     >
 EOD;
+        $mediaList = explode(',',$this->parseLibraryReferences($isPreview, $this->getOption('mediaList', null)));
+        
         foreach($mediaList as $media) {
             $body .= '<img src="' . $media . '" style="width: 100%; height: auto;"/>';
         }

@@ -1,7 +1,7 @@
 {
-    "title": "Slideshow module",
-    "author": "kgtech.fi",
-    "description": "Attempt at playing slideshow with library images",
+    "title": "Slideshow Module",
+    "author": "Kgtech.fi",
+    "description": "Bulk load images from the library into a slideshow",
     "name": "slideshow",
     "class": "Xibo\\Custom\\Slideshow"
 }
