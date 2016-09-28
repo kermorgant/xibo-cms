@@ -32,7 +32,7 @@ use Xibo\Widget\ModuleWidget;
 class Slideshow extends ModuleWidget
 {
     private $resourceFolder;
-    protected $codeSchemaVersion = 2;
+    protected $codeSchemaVersion = 1;
 
     /**
      * Slideshow constructor.
@@ -67,7 +67,7 @@ class Slideshow extends ModuleWidget
             $module->schemaVersion = $this->codeSchemaVersion;
             $module->settings = [];
             $module->defaultDuration = 60;
-            $module->viewPath = '../custom/slideshow';
+            //$module->viewPath = '../custom/slideshow';
             
             $this->setModule($module);
             $this->installModule();
@@ -100,11 +100,12 @@ class Slideshow extends ModuleWidget
         $this->setOption('mediaList', $this->getSanitizer()->getString('mediaList'));
         
         // should we use the assign media ?
-        $mediaList = explode(',' $this->getOption('mediaList', null));
-        foreach($mediaList as $mediaId) {
-            $this->assignMedia($mediaId);
-        }
-        // Save the widget
+        // $mediaList = explode(',' $this->getOption('mediaList', null));
+        // foreach($mediaList as $mediaId) {
+        //     $this->assignMedia($mediaId);
+        // }
+        
+        //Save the widget
         $this->validate();
         $this->saveWidget();
     }
@@ -119,11 +120,11 @@ class Slideshow extends ModuleWidget
         $this->setOption('mediaList', $this->getSanitizer()->getString('mediaList'));
         
         // should we use clearMedia & assignMedia ?
-        $mediaList = explode(',' $this->getOption('mediaList', null));
-        $this->clearMedia();
-        foreach($mediaList as $mediaId) {
-            $this->assignMedia($mediaId);            
-        }
+        // $mediaList = explode(',' $this->getOption('mediaList', null));
+        // $this->clearMedia();
+        // foreach($mediaList as $mediaId) {
+        //     $this->assignMedia($mediaId);            
+        // }
 
         // Save the widget
         $this->validate();
@@ -180,6 +181,14 @@ EOD;
         
         // Return that content.
         return $this->renderTemplate($data);
+    }
+
+    public function getMediaList()
+    {
+        $mediaListString = $this->getOption('mediaList', null);
+        $mediaListString = str_replace(array('[',']'), '', $mediaListString);
+
+        return explode(',',$mediaListString);
     }
 
     public function isValid()

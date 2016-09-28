@@ -5,6 +5,10 @@
     {% trans "Edit Slideshow" %}
 {% endblock %}
 
+{% block formButtons %}
+  {% trans "Cancel" %}, XiboDialogClose()
+  {% trans "Save" %}, AssignedMediaPut()
+{% endblock %}
 
 {% block slideshowFormHtml %}
   <div class="row">
@@ -56,13 +60,17 @@
       </div>
     </div>
     <div class="col-md-3">
-      <div id="LibraryAssign" class="well" data-url="{{ urlFor("module.widget.add", {type: module.widget.type, id: playlist.playlistId}) }} ">
+      <div id="SlideshowAssign" class="well" data-url="{{ urlFor("module.widget.edit", {type: module.widget.type, id: module.widget.widgetId}) }} ">
         <h4>{% trans "Assignments" %}</h4>
         <div>
-          <ul id="LibraryAssignSortable">
-            {% for item in mediaList %}
-              <li id="MediaID_{{ item.mediaId }}" class="li-sortable">{{ item.name }}<span class="glyphicon glyphicon-minus-sign"></span></li>
-            {% endfor %}
+          <ul id="SlideshowAssignSortable">
+	    {% for mediaId in module.mediaList %}
+              {% for item in media %}
+		{% if item.mediaId == mediaId %}
+		  <li id="MediaID_{{ item.mediaId }}" data-media-id="{{item.mediaId}}"class="li-sortable"><span class="glyphicon glyphicon-minus-sign">{{ item.name }}</span></li>
+		{% endif %}
+              {% endfor %}
+            {% endfor %}	    
           </ul>
         </div>
       </div>
