@@ -1,55 +1,12 @@
-{% extends "form-base.twig" %}
+{% extends "slideshow-form.twig" %}
 {% import "forms.twig" as forms %}
 
 {% block formTitle %}
   {% trans "Add Slideshow" %}
 {% endblock %}
 
-{% block formButtons %}
-  {% trans "Cancel" %}, XiboDialogClose()
-  {% trans "Save" %}, AssignedMediaSubmit()
-{% endblock %}
-
-{% block formFieldActions %}
-  [{
-  "field": "useDuration",
-  "trigger": "init",
-  "value": false,
-  "operation": "is:checked",
-  "actions": {
-  ".duration-fields": { "display": "none" }
-  }
-  },{
-  "field": "useDuration",
-  "trigger": "change",
-  "value": false,
-  "operation": "is:checked",
-  "actions": {
-  ".duration-fields": { "display": "none" }
-  }
-  },{
-  "field": "useDuration",
-  "trigger": "init",
-  "value": true,
-  "operation": "is:checked",
-  "actions": {
-  ".duration-fields": { "display": "block" }
-  }
-  },{
-  "field": "useDuration",
-  "trigger": "change",
-  "value": true,
-  "operation": "is:checked",
-  "actions": {
-  ".duration-fields": { "display": "block" }
-  }
-  }]
-{% endblock %}
-
-
-{% block callBack %}mediaFormCallBack{% endblock %}
-
-{% block formHtml %}
+{% block slideshowFormHtml %}
+  
   <div class="row">
     <div class="col-sm-12">
       {% set title %}{% trans "Set a duration?" %}{% endset %}
@@ -112,29 +69,6 @@
     </div>
   </div>
 
-  <script type="text/javascript">
-    var AssignedMediaSubmit = function() {
-    // Collect our media
-    var media = '';
-    $("#SlideshowAssignSortable > li").each(function() {
-    media = media + ',[' + $(this).data().mediaId + ']';
-    });
-    var useDuration = $("#useDuration").val();
-    var duration = $("#duration").val();
-
-    $.ajax({
-    type: "post",
-    url: $("#SlideshowAssign").data().url,
-    cache: false,
-    dataType: "json",
-    data: {
-    mediaList: media.substring(1),
-    useDuration: useDuration,
-    duration: duration		
-    },
-    success: XiboSubmitResponse
-    });	
-    };
-  </script>
-  
 {% endblock %}
+
+  

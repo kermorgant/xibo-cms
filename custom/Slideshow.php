@@ -35,7 +35,7 @@ class Slideshow extends ModuleWidget
     protected $codeSchemaVersion = 1;
 
     /**
-     * ForecastIo constructor.
+     * Slideshow constructor.
      */
     public function init()
     {
@@ -155,15 +155,14 @@ class Slideshow extends ModuleWidget
         $javaScriptContent .= '<script type="text/javascript" src="' . $this->getResourceUrl('vendor/jquery-cycle-2.1.6.min.js') . '"></script>';
         $javaScriptContent .= '<script type="text/javascript" src="' . $this->getResourceUrl('xibo-layout-scaler.js') . '"></script>';
 
-        $javaScriptContent .=  <<<'EOD'
-<script type="text/javascript">
-				      $('#slide').cycle({ 
-							fx:      'tileSlide', 
-							delay:   100,
-							fit: 1
-							});
-</script>
-EOD;
+//         $javaScriptContent .=  'EOD'
+// <script type="text/javascript">
+// 				      $('#slide').cycle({ 
+// 							fx:      'tileBlind,flipHorz,flipVert', 
+// 							timeout:   4000
+// 							});
+// </script>
+// EOD;
 
                            
 
@@ -173,17 +172,18 @@ EOD;
             $this->widget->save(['saveWidgetOptions' => false, 'notifyDisplays' => true]);        
 
         $i = 0;
-        $body = '<h1>'.$mediaList.'</h1>';
+        $body = <<<'EOD'
+<div class="cycle-slideshow" 
+    data-cycle-fx=tileBlind
+    data-cycle-timeout=4000
+    data-cycle-pager="#adv-custom-pager"
+    data-cycle-pager-template="<a href='#'><img src='{{src}}' width=20 height=20></a>"
+    >
+EOD;
         foreach($mediaList as $media) {
-            $i++;
-            if ($i == 1) {
-                $body .= '<div id="slide">';
-            }
             $body .= '<img src="' . $media . '" style="width: 100%; height: auto;"/>';
         }
-        if ($i > 0) {
-            $body .= '</div>';
-        }
+        $body .= '</div><div id=adv-custom-pager class="center external"></div>';
         
         $data['javaScript'] = $javaScriptContent;
         $data['body'] = $body;

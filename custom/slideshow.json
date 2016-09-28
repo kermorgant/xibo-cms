@@ -1,6 +1,6 @@
 {
     "title": "Slideshow module",
-    "author": "Mikael Kermorgant",
+    "author": "kgtech.fi",
     "description": "Attempt at playing slideshow with library images",
     "name": "slideshow",
     "class": "Xibo\\Custom\\Slideshow"
