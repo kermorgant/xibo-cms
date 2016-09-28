@@ -99,6 +99,11 @@ class Slideshow extends ModuleWidget
         $this->setUseDuration($this->getSanitizer()->getCheckbox('useDuration'));
         $this->setOption('mediaList', $this->getSanitizer()->getString('mediaList'));
         
+        // should we use the assign media ?
+        $mediaList = explode(',' $this->getOption('mediaList', null));
+        foreach($mediaList as $mediaId) {
+            $this->assignMedia($mediaId);
+        }
         // Save the widget
         $this->validate();
         $this->saveWidget();
@@ -113,6 +118,13 @@ class Slideshow extends ModuleWidget
         $this->setUseDuration($this->getSanitizer()->getCheckbox('useDuration'));
         $this->setOption('mediaList', $this->getSanitizer()->getString('mediaList'));
         
+        // should we use clearMedia & assignMedia ?
+        $mediaList = explode(',' $this->getOption('mediaList', null));
+        $this->clearMedia();
+        foreach($mediaList as $mediaId) {
+            $this->assignMedia($mediaId);            
+        }
+
         // Save the widget
         $this->validate();
         $this->saveWidget();
