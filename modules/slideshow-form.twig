@@ -62,7 +62,7 @@
 
   <div class="row">
     <div class="col-md-9">
-      <div id="libraryAssignFilterOptions">
+      <div id="SlideshowAssignFilterOptions">
         <form onsubmit="false">
           <div class="row">
             <div class="col-md-6">
@@ -162,7 +162,7 @@ var AssignedMediaPut = function() {
 
 function imageFormCallBack() {
     // prevent filter form submit
-    $("#libraryAssignFilterOptions").find("form").on("submit", function(e) {
+    $("#SlideshowAssignFilterOptions").find("form").on("submit", function(e) {
         e.preventDefault();
         return false;
     });
@@ -174,11 +174,12 @@ function imageFormCallBack() {
         "order": [[1, "asc"]],
         "filter": false,
         ajax: {
-            url: "{{ urlFor("library.search") }}",
-            "data": function (d) {
-                $.extend(d, $("#libraryAssignFilterOptions").find("form").serializeObject());
-            }
-        },
+	    url: "{{ urlFor('library.search') }}"
+	    , 
+	    "data": { 
+		'type': 'image'
+	    }
+	},
         "columns": [
             {"data": "mediaId"},
             {"data": "name"},
@@ -231,7 +232,7 @@ function imageFormCallBack() {
     $("#SlideshowAssignSortable").sortable();
 
     // Bind the filter form
-    $("#libraryAssignFilterOptions").find("input, select").change(function () {
+    $("#SlideshowAssignFilterOptions").find("input, select").change(function () {
         mediaTable.ajax.reload();
     });
 }

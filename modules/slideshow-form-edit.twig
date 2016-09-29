@@ -67,7 +67,7 @@
 	    {% for mediaId in module.mediaList %}
               {% for item in media %}
 		{% if item.mediaId == mediaId %}
-		  <li id="MediaID_{{ item.mediaId }}" data-media-id="{{item.mediaId}}"class="li-sortable"><span class="glyphicon glyphicon-minus-sign">{{ item.name }}</span></li>
+		  <li id="MediaID_{{ item.mediaId }}" data-media-id="{{item.mediaId}}"class="li-sortable"><span class="glyphicon glyphicon-minus-sign"></span>{{ item.name }}</li>
 		{% endif %}
               {% endfor %}
             {% endfor %}	    
@@ -76,6 +76,13 @@
       </div>
     </div>
   </div>
+
+  <script type="text/javascript">
+    // Add a span to that new item
+    $("#SlideshowAssignSortable li span").click(function() {
+        $(this).parent().remove();
+    });
+  </script>
 
   
 {% endblock %}
