@@ -46,6 +46,16 @@ class Slideshow extends ModuleWidget
     }
 
     /**
+     * Template for Layout Designer JavaScript
+     * @return string
+     */
+    public function layoutDesignerJavaScript()
+    {
+        return 'slideshow-form-js.twig';
+    }
+    
+    
+    /**
      * Install or Update this module
      * @param ModuleFactory $moduleFactory
      */
@@ -88,8 +98,19 @@ class Slideshow extends ModuleWidget
         if ($this->getUseDuration() == 1 && $this->getDuration() == 0)
             throw new \InvalidArgumentException(__('Please enter a duration'));
 
+        if (count($this->getMediaList()) < 2)
+            throw new \InvalidArgumentException(__('Please add at least 2 images' ));            
     }
 
+
+    public function getMediaList()
+    {
+        $mediaListString = $this->getOption('mediaList', null);
+        $mediaListString = str_replace(array('[',']'), '', $mediaListString);
+
+        return explode(',',$mediaListString);
+    }
+    
     /**
      * Add Media to the Database
      */
@@ -98,13 +119,7 @@ class Slideshow extends ModuleWidget
         $this->setDuration($this->getSanitizer()->getInt('duration', $this->getDuration()));
         $this->setUseDuration($this->getSanitizer()->getCheckbox('useDuration'));
         $this->setOption('mediaList', $this->getSanitizer()->getString('mediaList'));
-        
-        // should we use the assign media ?
-        // $mediaList = explode(',' $this->getOption('mediaList', null));
-        // foreach($mediaList as $mediaId) {
-        //     $this->assignMedia($mediaId);
-        // }
-        
+              
         //Save the widget
         $this->validate();
         $this->saveWidget();
@@ -119,13 +134,6 @@ class Slideshow extends ModuleWidget
         $this->setUseDuration($this->getSanitizer()->getCheckbox('useDuration'));
         $this->setOption('mediaList', $this->getSanitizer()->getString('mediaList'));
         
-        // should we use clearMedia & assignMedia ?
-        // $mediaList = explode(',' $this->getOption('mediaList', null));
-        // $this->clearMedia();
-        // foreach($mediaList as $mediaId) {
-        //     $this->assignMedia($mediaId);            
-        // }
-
         // Save the widget
         $this->validate();
         $this->saveWidget();
@@ -183,13 +191,6 @@ EOD;
         return $this->renderTemplate($data);
     }
 
-    public function getMediaList()
-    {
-        $mediaListString = $this->getOption('mediaList', null);
-        $mediaListString = str_replace(array('[',']'), '', $mediaListString);
-
-        return explode(',',$mediaListString);
-    }
 
     public function isValid()
     {
