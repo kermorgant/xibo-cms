@@ -1,4 +1,3 @@
-
 <script type="text/javascript">
 var AssignedMediaSubmit = function() {
     // Collect our media
@@ -62,10 +61,7 @@ function imageFormCallBack() {
         "order": [[1, "asc"]],
         "filter": false,
         ajax: {
-	    {% endraw %}
-	    url: "{{ urlFor('library.search') }}"
-	    {% raw %}
-	    , 
+	    url: "{{ urlFor('library.search') }}", 
 	    "data": { 
 		'type': 'image'
 	    }
@@ -127,4 +123,3 @@ function imageFormCallBack() {
     });
 }
 </script>
-

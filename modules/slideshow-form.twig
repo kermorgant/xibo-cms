@@ -47,6 +47,8 @@
 
 {% block formHtml %}
   {% block slideshowFormHtml %}
+
+  
   <div class="row">
     <div class="col-sm-12">
       {% set title %}{% trans "Set a duration?" %}{% endset %}
@@ -101,7 +103,7 @@
         <div>
           <ul id="SlideshowAssignSortable">
             {% for item in mediaList %}
-              <li id="MediaID_{{ item.mediaId }}" class="li-sortable">{{ item.name }}<span class="glyphicon glyphicon-minus-sign"></span></li>
+            <li id="MediaID_{{ item.mediaId }}" class="li-sortable">{{ item.name }}<span class="glyphicon glyphicon-minus-sign"></span></li>
             {% endfor %}
           </ul>
         </div>
@@ -110,5 +112,7 @@
   </div>
 
   {% endblock %}
-  
+
+
+	  
 {% endblock %}

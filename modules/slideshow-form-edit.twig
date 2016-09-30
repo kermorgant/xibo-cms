@@ -11,6 +11,18 @@
 {% endblock %}
 
 {% block slideshowFormHtml %}
+
+  <style>
+#SlideshowAssignSortable .li-sortable {
+    background-color: #e5f0ff;
+    border: 1px solid #8080ff;
+    cursor: pointer;
+    list-style: outside none none;
+    margin: 5px;
+    padding: 5px;
+}
+  </style>
+  
   <div class="row">
     <div class="col-sm-12">
       {% set title %}{% trans "Set a duration?" %}{% endset %}
