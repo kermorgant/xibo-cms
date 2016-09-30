@@ -51,7 +51,7 @@ class Slideshow extends ModuleWidget
      */
     public function layoutDesignerJavaScript()
     {
-        return 'slideshow-form-js.twig';
+        return 'slideshow-form-js';
     }
     
     
