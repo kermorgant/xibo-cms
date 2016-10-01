@@ -5,19 +5,14 @@
   {% trans "Add Slideshow" %}
 {% endblock %}
 
+{% block formButtons %}
+  {% trans "Cancel" %}, XiboDialogClose()
+  {% trans "Save" %}, AssignedMediaSubmit()
+{% endblock %}
+  
 {% block slideshowFormHtml %}
 
-  <style>
-#SlideshowAssignSortable .li-sortable {
-    background-color: #e5f0ff;
-    border: 1px solid #8080ff;
-    cursor: pointer;
-    list-style: outside none none;
-    margin: 5px;
-    padding: 5px;
-}
-  </style>
-  
+
   <div class="row">
     <div class="col-sm-12">
       {% set title %}{% trans "Set a duration?" %}{% endset %}
@@ -28,11 +23,37 @@
       {% set helpText %}{% trans "The duration in seconds this should be displayed" %}{% endset %}
       {{ forms.number("duration", title, module.getModule().defaultDuration, helpText, "duration-fields", "required") }}
 
+      {% set title %}{% trans "Effect" %}{% endset %}
+      {% set helpText %}{% trans "Please select the effect that will be used to transition between items." %}{% endset %}
+      {% set noneOption %}{% trans "None" %}{% endset %}
+      {% set fade %}{% trans "Fade" %}{% endset %}
+      {% set fadeout %}{% trans "Fade Out" %}{% endset %}
+      {% set scrollHorz %}{% trans "Scroll Horizontal" %}{% endset %}
+      {% set scrollVert %}{% trans "Scroll Vertical" %}{% endset %}
+      {% set flipHorz %}{% trans "Flip Horizontal" %}{% endset %}
+      {% set flipVert %}{% trans "Flip Vertical" %}{% endset %}
+      {% set shuffle %}{% trans "Shuffle" %}{% endset %}
+      {% set tileSlide %}{% trans "Tile Slide" %}{% endset %}
+      {% set tileBlind %}{% trans "Tile Blind" %}{% endset %}
+      {% set options = [
+      { effectid: "none", effect: noneOption },
+      { effectid: "fade", effect: fade },
+      { effectid: "fadeout", effect: fadeout},
+      { effectid: "scrollHorz", effect: scrollHorz},
+      { effectid: "scrollVert", effect: scrollVert},
+      { effectid: "flipHorz", effect: flipHorz},
+      { effectid: "flipVert", effect: flipVert},
+      { effectid: "shuffle", effect: shuffle},
+      { effectid: "tileSlide", effect: tileSlide},
+      { effectid: "tileBlind", effect: tileBlind}
+      ] %}
+      {{ forms.dropdown("effect", "single", title, module.getOption("effect"), options, "effectid", "effect", helpText) }}      
+
     </div>
   </div>
 
   <div class="row">
-    <div class="col-md-9">
+    <div class="col-md-8">
       <div id="libraryAssignFilterOptions">
         <form onsubmit="false">
           <div class="row">
@@ -66,7 +87,7 @@
         </div>
       </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-4">
       <div id="SlideshowAssign" class="well" data-url="{{ urlFor("module.widget.add", {type: module.widget.type, id: playlist.playlistId}) }} ">
         <h4>{% trans "Assignments" %}</h4>
         <div>

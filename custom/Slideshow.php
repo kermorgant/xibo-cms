@@ -32,7 +32,7 @@ use Xibo\Widget\ModuleWidget;
 class Slideshow extends ModuleWidget
 {
     private $resourceFolder;
-    protected $codeSchemaVersion = 1;
+    protected $codeSchemaVersion = 2;
 
     /**
      * Slideshow constructor.
@@ -118,6 +118,7 @@ class Slideshow extends ModuleWidget
     {
         $this->setDuration($this->getSanitizer()->getInt('duration', $this->getDuration()));
         $this->setUseDuration($this->getSanitizer()->getCheckbox('useDuration'));
+        $this->setOption('effect', $this->getSanitizer()->getString('effect'));        
         $this->setOption('mediaList', $this->getSanitizer()->getString('mediaList'));
               
         //Save the widget
@@ -132,6 +133,7 @@ class Slideshow extends ModuleWidget
     {
         $this->setDuration($this->getSanitizer()->getInt('duration', $this->getDuration()));
         $this->setUseDuration($this->getSanitizer()->getCheckbox('useDuration'));
+        $this->setOption('effect', $this->getSanitizer()->getString('effect'));        
         $this->setOption('mediaList', $this->getSanitizer()->getString('mediaList'));
         
         // Save the widget
@@ -166,17 +168,20 @@ class Slideshow extends ModuleWidget
         
         // Update and save widget if we've changed our assignments.
         if ($this->hasMediaChanged())
-            $this->widget->save(['saveWidgetOptions' => false, 'notifyDisplays' => true]);        
+            $this->widget->save(['saveWidgetOptions' => false, 'notifyDisplays' => true]);
 
         $i = 0;
         $body = <<<'EOD'
 <div class="cycle-slideshow" 
-    data-cycle-fx=tileBlind
+    data-cycle-fx=##EFFECT##
     data-cycle-timeout=4000
     data-cycle-pager="#adv-custom-pager"
     data-cycle-pager-template="<a href='#'><img src='{{src}}' width=20 height=20></a>"
     >
 EOD;
+        $body = str_replace('##EFFECT##',
+                            $this->getOption('effect', 'tileBlind'),
+                            $body);
         $mediaList = explode(',',$this->parseLibraryReferences($isPreview, $this->getOption('mediaList', null)));
         
         foreach($mediaList as $media) {
