@@ -1,26 +1,29 @@
-<script type="text/javascript">
-var AssignedMediaSubmit = function() {
-    // Collect our media
-    var media = '';
-    $("#SlideshowAssignSortable > li").each(function() {
-	media = media + ',[' + $(this).data().mediaId + ']';
-    });
-    var useDuration = $("#useDuration").val();
-    var duration = $("#duration").val();
+    <script type="text/javascript">
+    var AssignedMediaSubmit = function() {
+	// Collect our media
+	var media = '';
+	$("#SlideshowAssignSortable > li").each(function() {
+	    media = media + ',[' + $(this).data().mediaId + ']';
+	});
+	var useDuration = $("#useDuration").val();
+	var duration = $("#duration").val();
+	var effect = $("#effect").val();	
 
-    $.ajax({
-	type: "post",
-	url: $("#SlideshowAssign").data().url,
-	cache: false,
-	dataType: "json",
-	data: {
-	    mediaList: media.substring(1),
-	    useDuration: useDuration,
-	    duration: duration		
-	},
-	success: XiboSubmitResponse
-    });	
-};
+	$.ajax({
+	    type: "post",
+	    url: $("#SlideshowAssign").data().url,
+	    cache: false,
+	    dataType: "json",
+	    data: {
+		mediaList: media.substring(1),
+		useDuration: useDuration,
+		duration: duration,
+		effect: effect
+		
+	    },
+	    success: XiboSubmitResponse
+	});	
+    };
 
 var AssignedMediaPut = function() {
     // Collect our media
@@ -30,6 +33,7 @@ var AssignedMediaPut = function() {
     });
     var useDuration = $("#useDuration").val();
     var duration = $("#duration").val();
+    var effect = $("#effect").val();
 
     $.ajax({
 	type: "put",
@@ -39,7 +43,8 @@ var AssignedMediaPut = function() {
 	data: {
 	    mediaList: media.substring(1),
 	    useDuration: useDuration,
-	    duration: duration		
+	    duration: duration,
+	    effect: effect
 	},
 	success: XiboSubmitResponse
     });	
