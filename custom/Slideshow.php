@@ -8,7 +8,7 @@
  * Xibo is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * any later version. 
+ * any later version.
  *
  * Xibo is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -21,10 +21,7 @@
  */
 namespace Xibo\Custom;
 
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\RequestException;
 use Respect\Validation\Validator as v;
-use Xibo\Entity\Media;
 use Xibo\Exception\NotFoundException;
 use Xibo\Factory\ModuleFactory;
 use Xibo\Widget\ModuleWidget;
@@ -32,7 +29,7 @@ use Xibo\Widget\ModuleWidget;
 class Slideshow extends ModuleWidget
 {
     private $resourceFolder;
-    protected $codeSchemaVersion = 2;
+    protected $codeSchemaVersion = 1;
 
     /**
      * Slideshow constructor.
@@ -53,8 +50,8 @@ class Slideshow extends ModuleWidget
     {
         return 'slideshow-form-js';
     }
-    
-    
+
+
     /**
      * Install or Update this module
      * @param ModuleFactory $moduleFactory
@@ -77,8 +74,8 @@ class Slideshow extends ModuleWidget
             $module->schemaVersion = $this->codeSchemaVersion;
             $module->settings = [];
             $module->defaultDuration = 60;
-            //$module->viewPath = '../custom/slideshow';
-            
+            $module->viewPath = '../custom/slideshow';
+
             $this->setModule($module);
             $this->installModule();
         }
@@ -99,7 +96,7 @@ class Slideshow extends ModuleWidget
             throw new \InvalidArgumentException(__('Please enter a duration'));
 
         if (count($this->getMediaList()) < 2)
-            throw new \InvalidArgumentException(__('Please add at least 2 images' ));            
+            throw new \InvalidArgumentException(__('Please add at least 2 images' ));
     }
 
 
@@ -110,7 +107,7 @@ class Slideshow extends ModuleWidget
 
         return explode(',',$mediaListString);
     }
-    
+
     /**
      * Add Media to the Database
      */
@@ -118,9 +115,9 @@ class Slideshow extends ModuleWidget
     {
         $this->setDuration($this->getSanitizer()->getInt('duration', $this->getDuration()));
         $this->setUseDuration($this->getSanitizer()->getCheckbox('useDuration'));
-        $this->setOption('effect', $this->getSanitizer()->getString('effect'));        
+        $this->setOption('effect', $this->getSanitizer()->getString('effect'));
         $this->setOption('mediaList', $this->getSanitizer()->getString('mediaList'));
-              
+
         //Save the widget
         $this->validate();
         $this->saveWidget();
@@ -133,9 +130,9 @@ class Slideshow extends ModuleWidget
     {
         $this->setDuration($this->getSanitizer()->getInt('duration', $this->getDuration()));
         $this->setUseDuration($this->getSanitizer()->getCheckbox('useDuration'));
-        $this->setOption('effect', $this->getSanitizer()->getString('effect'));        
+        $this->setOption('effect', $this->getSanitizer()->getString('effect'));
         $this->setOption('mediaList', $this->getSanitizer()->getString('mediaList'));
-        
+
         // Save the widget
         $this->validate();
         $this->saveWidget();
@@ -158,21 +155,21 @@ class Slideshow extends ModuleWidget
 
         // Replace the View Port Width?
         $data['viewPortWidth'] = ($isPreview) ? $this->region->width : '[[ViewPortWidth]]';
-        
+
         $duration = $this->getCalculatedDurationForGetResource();
 
         // Replace the head content
         $javaScriptContent = '<script type="text/javascript" src="' . $this->getResourceUrl('vendor/jquery-1.11.1.min.js') . '"></script>';
         $javaScriptContent .= '<script type="text/javascript" src="' . $this->getResourceUrl('vendor/jquery-cycle-2.1.6.min.js') . '"></script>';
         $javaScriptContent .= '<script type="text/javascript" src="' . $this->getResourceUrl('xibo-layout-scaler.js') . '"></script>';
-        
+
         // Update and save widget if we've changed our assignments.
         if ($this->hasMediaChanged())
             $this->widget->save(['saveWidgetOptions' => false, 'notifyDisplays' => true]);
 
         $i = 0;
         $body = <<<'EOD'
-<div class="cycle-slideshow" 
+<div class="cycle-slideshow"
     data-cycle-fx=##EFFECT##
     data-cycle-timeout=4000
     data-cycle-pager="#adv-custom-pager"
@@ -183,15 +180,15 @@ EOD;
                             $this->getOption('effect', 'tileBlind'),
                             $body);
         $mediaList = explode(',',$this->parseLibraryReferences($isPreview, $this->getOption('mediaList', null)));
-        
+
         foreach($mediaList as $media) {
             $body .= '<img src="' . $media . '" style="width: 100%; height: auto;"/>';
         }
         $body .= '</div><div id=adv-custom-pager class="center external"></div>';
-        
+
         $data['javaScript'] = $javaScriptContent;
         $data['body'] = $body;
-        
+
         // Return that content.
         return $this->renderTemplate($data);
     }
