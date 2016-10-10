@@ -97,6 +97,8 @@ class Slideshow extends ModuleWidget
 
         if (count($this->getMediaList()) < 2)
             throw new \InvalidArgumentException(__('Please add at least 2 images' ));
+        elseif (count($this->getMediaList()) > 10)
+            throw new \InvalidArgumentException(__('Please select less than 10 images' ));
     }
 
 
@@ -137,7 +139,6 @@ class Slideshow extends ModuleWidget
         $this->validate();
         $this->saveWidget();
     }
-
 
 
     /**
