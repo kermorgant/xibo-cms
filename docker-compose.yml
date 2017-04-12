@@ -11,11 +11,8 @@ services:
       - MYSQL_ROOT_PASSWORD=root
     volumes:
       - ./shared/db:/var/lib/mysql
-<<<<<<< HEAD
     ports:
       - "3306:3306"
-=======
->>>>>>> 84469b9... first step in experiment to bypass vagrant and use docker directly
 
   cms-xmr:
     container_name: cms-xmr
@@ -24,12 +21,8 @@ services:
       - "9505:9505"
   cms-web:
     container_name: cms-web
-<<<<<<< HEAD
     build: docker/cms-web
 #    image: xibosignage/xibo-cms-dev:latest
-=======
-    image: xibosignage/xibo-cms-dev:latest
->>>>>>> 84469b9... first step in experiment to bypass vagrant and use docker directly
     ports:
       - "80:80"
     environment:
@@ -37,8 +30,3 @@ services:
     volumes:
       - ./:/var/www/cms
       - ./shared/backup:/var/www/backup
-<<<<<<< HEAD
-     
-=======
-    
->>>>>>> 84469b9... first step in experiment to bypass vagrant and use docker directly
