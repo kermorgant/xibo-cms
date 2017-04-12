@@ -14,3 +14,5 @@ RUN apt-get update && apt-get install -y \
 RUN cd /var/www/cms && composer install
 
 RUN npm install  --global gulp-cli
+    nodejs \
+    && rm -rf /var/lib/apt/lists/*
